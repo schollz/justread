@@ -37,7 +37,7 @@ def getDoc(url):
 		numLines = 0
 		for child in parents_with_children_counts[i][0]: # Possibly [1][0]
 			tag = str(child.tag)
-			if tag == 'font':
+			if tag == 'font' or tag == 'div':
 				tag = 'p'
 			try:
 				startTag = "<" + tag + ">"
@@ -49,7 +49,7 @@ def getDoc(url):
 				continue
 			try:
 				newString = startTag + " ".join(str(child.text_content().encode('utf-8')).split()) + endTag + "\n"
-				if "<script>" in newString:
+				if "<script>" in newString or 'function()' in newString:
 					continue
 				if len(newString) > 10000 or len(newString)<14 or '{ "' in newString:
 					continue
