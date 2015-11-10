@@ -53,7 +53,7 @@ def getDoc(url):
 					continue
 				if len(newString) > 10000 or len(newString)<14 or '{ "' in newString:
 					continue
-				print(len(newString))
+				#print(len(newString))
 				if len(newString) > 100:
 					numLines += 1
 				docString += newString
@@ -66,7 +66,7 @@ def getDoc(url):
 	bestI = 0
 	bestNumLines = 0
 	for i in range(len(docStrings)):
-		print(docStrings[i]['numLines'])
+		#print(docStrings[i]['numLines'])
 		if docStrings[i]['numLines'] > bestNumLines:
 			bestI = i
 			bestNumLines = docStrings[i]['numLines']

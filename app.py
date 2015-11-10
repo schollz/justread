@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from parseDoc import *
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 
 @app.route("/")
 def hello():
@@ -13,4 +13,4 @@ def hello():
     return render_template('article.html', data=data)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=8012)
+    app.run(host='0.0.0.0',port=8009)
