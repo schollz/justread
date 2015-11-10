@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>{{ data['title'] | safe }}</title>
+<link rel="stylesheet" href="/static/yue.css" />
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0.4em 1em 6em;
+        background: #fff;
+      }
+      .yue {
+        max-width: 650px;
+        margin: 0 auto;
+      }
+    </style>
+    
+  </head>
+  <body>
+<div class="yue">
+<h1>{{ data['title'] | safe }}</h1>
+<p><small><i>{{ data['description'] | safe }}</i></small></p>
+<p><small>Generated in {{ data['timeElapsed'] | safe }}ms </small></p>
+<hr>
+
+
+{{ data['content'] | safe }}
+
+</div>
+
+</body>
+</html>
