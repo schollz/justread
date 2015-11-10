@@ -3,14 +3,22 @@ from flask import Flask, render_template, request, jsonify
 from parseDoc import *
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 
-@app.route("/")
+@app.route('/', methods=['POST','GET'])
 def hello():
-    url = request.args.get('url', '')
-    print(url)
-    data = getDoc(url)
-    return render_template('article.html', data=data)
+    url = ''
+    if request.method == 'GET':
+        url = request.args.get('url', '')
+    if request.method == 'POST':
+        url = request.form['group'].lower()
+    if len(url) < 10:
+        return render_template('index.html')
+    else:
+        print(url)
+        data = getDoc(url)
+        return render_template('article.html', data=data)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8009)

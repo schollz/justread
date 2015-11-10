@@ -20,13 +20,17 @@
   </head>
   <body>
 <div class="yue">
+<p align="center"><a href="/">&larr; Another</a></p>
+
 <h1>{{ data['title'] | safe }}</h1>
 <p><small><i>{{ data['description'] | safe }}</i></small></p>
-<p><small>Generated in {{ data['timeElapsed'] | safe }}ms </small></p>
+<p><small>Loaded in {{ data['size'] | safe }}kb in {{ data['timeElapsed'] | safe }} ms. <a href="{{ data['url'] }}">Original.</a></small></p>
 <hr>
 
 
 {{ data['content'] | safe }}
+
+<p align="center"><a href="/">&larr; Another</a></p>
 
 </div>
 

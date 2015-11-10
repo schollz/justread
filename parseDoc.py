@@ -11,6 +11,7 @@ import lxml.html
 
 
 
+
 def getDoc(url):
 	t = time.time()
 	r = get(url)
@@ -31,13 +32,16 @@ def getDoc(url):
 	parents_with_children_counts.sort(key=lambda x: x[1].most_common(1)[0][1], reverse=True)
 
 	docStrings = {}
+	last = len(parents_with_children_counts)
+	if last > 10:
+		last = 10
 
-	for i in range(10):
+	for i in range(last):
 		docString = ""
 		numLines = 0
 		for child in parents_with_children_counts[i][0]: # Possibly [1][0]
 			tag = str(child.tag)
-			if tag == 'font' or tag == 'div':
+			if tag == 'font' or tag == 'div' or tag == 'script':
 				tag = 'p'
 			try:
 				startTag = "<" + tag + ">"
@@ -45,19 +49,17 @@ def getDoc(url):
 			except:
 				startTag = '<p>'
 				endTag = '</p>'
-			if "script" in startTag or "header" in startTag or "footer" in startTag:
-				continue
 			try:
 				newString = startTag + " ".join(str(child.text_content().encode('utf-8')).split()) + endTag + "\n"
-				if "<script>" in newString or 'function()' in newString:
-					continue
-				if len(newString) > 10000 or len(newString)<14 or '{ "' in newString:
+				if len(newString) > 50000 or len(newString)<14 or '{ "' in newString or '{"' in newString or "function()" in newString:
 					continue
 				#print(len(newString))
-				if len(newString) > 100:
+				print(tag)
+				if len(newString) > 200 and 'li' not in tag:
 					numLines += 1
 				docString += newString
 			except:
+				print('error')
 				pass
 		docStrings[i] = {}
 		docStrings[i]['docString'] = docString
@@ -66,7 +68,7 @@ def getDoc(url):
 	bestI = 0
 	bestNumLines = 0
 	for i in range(len(docStrings)):
-		#print(docStrings[i]['numLines'])
+		print(docStrings[i]['numLines'])
 		if docStrings[i]['numLines'] > bestNumLines:
 			bestI = i
 			bestNumLines = docStrings[i]['numLines']
@@ -83,6 +85,9 @@ def getDoc(url):
 		description = ""
 	url = r.url
 	timeElapsed = int((time.time()-t)*1000)
-	return {'title':title,'description':description,'url':url,'timeElapsed':timeElapsed,'content':docString.decode('utf-8')}
+	docString = docString.decode('utf-8')
+	fileSize = 0.7 + float(sys.getsizeof(docString)/1000.0)
+	fileSize = round(fileSize,1)
+	return {'title':title,'description':description,'url':url,'timeElapsed':timeElapsed,'content':docString,'size':fileSize}
 
 #print(getDoc('http://www.bbc.co.uk/news/entertainment-arts-34768201'))
