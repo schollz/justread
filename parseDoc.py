@@ -33,8 +33,8 @@ def getDoc(url):
 
 	docStrings = {}
 	last = len(parents_with_children_counts)
-	if last > 10:
-		last = 10
+	if last > 20:
+		last = 20
 
 	for i in range(last):
 		docString = ""
@@ -51,11 +51,10 @@ def getDoc(url):
 				endTag = '</p>'
 			try:
 				newString = startTag + " ".join(str(child.text_content().encode('utf-8')).split()) + endTag + "\n"
-				if len(newString) > 50000 or len(newString)<14 or '{ "' in newString or '{"' in newString or "function()" in newString:
+				if len(newString) > 50000 or len(newString)<14 or '{ "' in newString or '{"' in newString or "function()" in newString or 'else {' in newString or '.js' in newString or 'ajax' in newString or 'var ' in newString or '()' in newString:
 					continue
-				#print(len(newString))
-				print(tag)
-				if len(newString) > 200 and 'li' not in tag:
+				print(len(newString))
+				if len(newString) > 200 and len(newString) < 1000 and 'li' not in tag:
 					numLines += 1
 				docString += newString
 			except:
@@ -74,7 +73,9 @@ def getDoc(url):
 			bestNumLines = docStrings[i]['numLines']
 
 	docString = docStrings[bestI]['docString']
-
+	print("*"*30)
+	print(bestI)
+	print("*"*30)
 	if len(docString)<100:
 		docString="<h1>There is no content on this page.</h1>"
 
