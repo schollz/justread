@@ -46,6 +46,8 @@ def getDoc(url):
         numLines = 0
         for child in parents_with_children_counts[i][0]: # Possibly [1][0]
             tag = str(child.tag)
+            if tag == 'style' or tag == 'iframe':
+                continue
             if tag == 'font' or tag == 'div' or tag == 'script':
                 tag = 'p'
             try:
@@ -63,6 +65,8 @@ def getDoc(url):
                         "function()" in newString or 
                         'else {' in newString or 
                         '.js' in newString or 
+                        'pic.twitter' in newString or 
+                        '("' in newString or 
                         'ajax' in newString or 
                         'var ' in newString or 
                         ('Advertisement' in newString and len(newString)<200) or 
@@ -105,9 +109,10 @@ def getDoc(url):
     url = r.url
     timeElapsed = int((time.time()-t)*1000)
     docString = docString.decode('utf-8')
+    for s in docString.split('\n'):
+        print(len(s))
     fileSize = 0.7 + float(sys.getsizeof(docString)/1000.0)
     fileSize = round(fileSize,1)
-    print(docString)
     return {'title':title,'description':description,'url':url,'timeElapsed':timeElapsed,'content':docString,'size':fileSize}
 
 #print(getDoc('http://www.bbc.co.uk/news/entertainment-arts-34768201'))
