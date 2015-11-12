@@ -1,4 +1,2 @@
-# pocket-this
-Like pocket, but allows you to download
 
-Simplifies the process of reading websites. Faster, less memory intensive.
+gunicorn -w 4 -b 127.0.0.1:8009 justread:app
