@@ -15,7 +15,8 @@ import lxml.html
 def getDoc(url):
     t = time.time()
     t2 = time.time()
-    r = get(url)
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'}
+    r = get(url,headers=headers)
     print("*"*30)
     print("Getting url took " + str(time.time()-t2))
     print("*"*30)
@@ -46,6 +47,7 @@ def getDoc(url):
         numLines = 0
         for child in parents_with_children_counts[i][0]: # Possibly [1][0]
             tag = str(child.tag)
+            print(tag)
             if tag == 'style' or tag == 'iframe':
                 continue
             if tag == 'font' or tag == 'div' or tag == 'script':
