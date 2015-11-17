@@ -75,6 +75,7 @@ def getDoc(url):
                     str_text = str_text.replace('<br> <br>','<br>')
                 str_text = str_text.replace('\u0096','-').replace('\u2014','-').replace('\\u00a0',' ')
                 str_text = str_text.replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ')
+                str_text = str_text.replace('\\','')
                 newString = startTag + str_text + endTag + "\n"
                 newString = str_text + "\n\n"
                 if (len(newString) > 50000 or 
@@ -92,10 +93,12 @@ def getDoc(url):
                         'Continue reading' in newString or 
                         ('Photo' in newString and 'Credit' in newString) or 
                         'window.' in newString or 
+                        ');' in newString or 
+                        '; }' in newString or
                         '()' in newString):
                     continue
                 #print(len(newString))
-                if len(newString) > 100:
+                if len(newString) > 100 and ':' not in newString:
                     numLines += 1
                 docString += newString
             except:
