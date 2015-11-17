@@ -2,6 +2,8 @@
 import time
 import sys
 import uuid
+import json
+import markdown
 from collections import Counter
 from requests import get
 from lxml import html
@@ -23,9 +25,10 @@ def getDoc(url):
     redirectUrl = str(uuid.uuid3(uuid.NAMESPACE_DNS, str(r.url)))[0:5]
 
 
-    parsed_doc = html.fromstring(r.content)
-
-
+    newContent = r.content
+    parsed_doc = html.fromstring(newContent)
+    with open('doc.html','w') as f:
+        f.write(newContent)
 
 
     parents_with_children_counts = []
@@ -47,6 +50,7 @@ def getDoc(url):
         numLines = 0
         for child in parents_with_children_counts[i][0]: # Possibly [1][0]
             tag = str(child.tag)
+
             print(tag)
             if tag == 'style' or tag == 'iframe':
                 continue
@@ -59,7 +63,20 @@ def getDoc(url):
                 startTag = '<p>'
                 endTag = '</p>'
             try:
-                newString = startTag + " ".join(str(child.text_content().encode('utf-8')).split()) + endTag + "\n"
+                str_text = child.text_content().encode('utf-8')
+                #str_text = " ".join(str_text.split())
+                str_text = json.dumps(str_text)
+                str_text = str_text.replace('\"','').replace('\\n','\n')
+                str_text = str_text.replace('\\t','').replace('\\r','')
+                str_text = str_text.replace('\u0092',"'").replace('\\u00e2\\u0080\\u0099',"'").replace('\u2019',"'")
+                str_text = str_text.replace('\u0093','"').replace('\u00e2\u0080\u009c','"').replace('\u00e2\u0080\u009d','"').replace('\u201c','"').replace('\u201d','"')
+                str_text = str_text.replace('\u0094','"').replace('\u00e2\u0080" ','')
+                for foo in range(5):
+                    str_text = str_text.replace('<br> <br>','<br>')
+                str_text = str_text.replace('\u0096','-').replace('\u2014','-').replace('\\u00a0',' ')
+                str_text = str_text.replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ')
+                newString = startTag + str_text + endTag + "\n"
+                newString = str_text + "\n\n"
                 if (len(newString) > 50000 or 
                         len(newString)<14 or 
                         '{ "' in newString or 
@@ -78,27 +95,35 @@ def getDoc(url):
                         '()' in newString):
                     continue
                 #print(len(newString))
-                if len(newString) > 200 and len(newString) < 1000 and 'li' not in tag:
+                if len(newString) > 100:
                     numLines += 1
                 docString += newString
             except:
                 #print('error')
                 pass
         docStrings[i] = {}
-        docStrings[i]['docString'] = docString
+        docStrings[i]['docString'] = markdown.markdown(docString)
         docStrings[i]['numLines'] = numLines
+        docStrings[i]['docString_length'] = len(docString)
 
     print("*"*30)
     print("Looping took " + str(time.time()-t2))
     print("*"*30)
     
+    with open('test.json','w') as f:
+        f.write(json.dumps(docStrings,indent=2))
+
     bestI = 0
     bestNumLines = 0
     for i in range(len(docStrings)):
-        if docStrings[i]['numLines'] > bestNumLines:
+        if docStrings[i]['numLines']*docStrings[i]['docString_length'] > bestNumLines:
             bestI = i
-            bestNumLines = docStrings[i]['numLines']
+            bestNumLines = docStrings[i]['numLines']*docStrings[i]['docString_length']
 
+    print("*"*24)
+    print(bestI)
+    print(bestNumLines)
+    print("*"*24)
     docString = docStrings[bestI]['docString']
     if len(docString)<100:
         docString="<h1>There is no content on this page.</h1>"
