@@ -10,6 +10,12 @@ This is a really simple parser based off [Rodrigo's data extraction code](http:/
 
 # Setup
 
+Install using
+
+```bash
+pip install -r requirements.txt
+```
+
 To run just use
 
 ```bash
