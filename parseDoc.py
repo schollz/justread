@@ -75,7 +75,7 @@ def getDoc(url):
                     str_text = str_text.replace('<br> <br>','<br>')
                 str_text = str_text.replace('\u0096','-').replace('\u2014','-').replace('\\u00a0',' ')
                 str_text = str_text.replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ').replace('  ',' ')
-                str_text = str_text.replace('\\','').replace('u2026 ','')
+                str_text = str_text.replace('\\','').replace('u2026 ','').replace('u00c2','')
                 newString = startTag + str_text + endTag + "\n"
                 newString = str_text + "\n\n"
                 if (len(newString) > 50000 or 
