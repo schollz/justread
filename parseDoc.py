@@ -98,7 +98,7 @@ def getDoc(url):
                         '()' in newString):
                     continue
                 #print(len(newString))
-                if len(newString) > 100 and ':' not in newString:
+                if len(newString) > 50 and ':' not in newString:
                     numLines += 1
                 docString += newString
             except:
@@ -106,8 +106,14 @@ def getDoc(url):
                 pass
         docStrings[i] = {}
         docStrings[i]['docString'] = markdown.markdown(docString)
+        docStrings[i]['word_per_p'] = float(len(docString.split())) / float(len(docStrings[i]['docString'].split('<p>')))
         docStrings[i]['numLines'] = numLines
         docStrings[i]['docString_length'] = len(docString)
+        try:
+            docStrings[i]['score']=1000*numLines
+            #docStrings[i]['score']=1000*numLines / sum(1 for c in docString if c.isupper())
+        except:
+            docStrings[i]['score'] = 0
 
     print("*"*30)
     print("Looping took " + str(time.time()-t2))
@@ -119,9 +125,11 @@ def getDoc(url):
     bestI = 0
     bestNumLines = 0
     for i in range(len(docStrings)):
-        if docStrings[i]['numLines']*docStrings[i]['docString_length'] > bestNumLines:
+        if (docStrings[i]['word_per_p']>12 and
+                docStrings[i]['score'] > bestNumLines and 
+                docStrings[i]['docString_length'] > 300):
             bestI = i
-            bestNumLines = docStrings[i]['numLines']*docStrings[i]['docString_length']
+            bestNumLines = docStrings[i]['score']
 
     print("*"*24)
     print(bestI)

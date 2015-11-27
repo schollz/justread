@@ -5,8 +5,12 @@
 
 This is a really simple parser based off [Rodrigo's data extraction code](http://rodp.me/2015/how-to-extract-data-from-the-web.html). If you are like me and tired of seeing ads, images, links, videos, weird text - then you should try this. 
 
-[Try it out here](http://choices.duckdns.org)
+[Try it out here](http://justread.duckdns.org)
 
+
+# Requirements
+
+- Python 2.7+
 
 # Setup
 
