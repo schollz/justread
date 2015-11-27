@@ -36,4 +36,8 @@ gunicorn -w 4 -b 127.0.0.1:8009 justread:app
 
 - Add "Share this" link
 
+# Known Issues
 
+- Code snippets filtered out
+- Formatting removed
+- Leftover bits (Image Caption, Advertisement keywords)
