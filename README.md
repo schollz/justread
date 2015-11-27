@@ -41,3 +41,9 @@ gunicorn -w 4 -b 127.0.0.1:8009 justread:app
 - Code snippets filtered out
 - Formatting removed
 - Leftover bits (Image Caption, Advertisement keywords)
+
+# Features
+
+- Similar to Pocket, but without the use of Pocket!
+- Don't need to save anything
+- Hackable
