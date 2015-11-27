@@ -95,6 +95,7 @@ def getDoc(url):
                         'window.' in newString or 
                         ');' in newString or 
                         '; }' in newString or
+                        'CDATA' in newString or
                         '()' in newString):
                     continue
                 #print(len(newString))
