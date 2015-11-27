@@ -110,7 +110,7 @@ def getDoc(url):
         docStrings[i]['numLines'] = numLines
         docStrings[i]['docString_length'] = len(docString)
         try:
-            docStrings[i]['score']=1000*numLines
+            docStrings[i]['score']=numLines*docStrings[i]['word_per_p']
             #docStrings[i]['score']=1000*numLines / sum(1 for c in docString if c.isupper())
         except:
             docStrings[i]['score'] = 0

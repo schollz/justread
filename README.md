@@ -47,3 +47,4 @@ gunicorn -w 4 -b 127.0.0.1:8009 justread:app
 - Similar to Pocket, but without the use of Pocket!
 - Don't need to save anything
 - Hackable
+- FAST (roughly 200-600 ms to load any page)
