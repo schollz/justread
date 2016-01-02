@@ -10,7 +10,7 @@ from lxml import html
 from unidecode import unidecode
 import urllib
 import lxml.html
-
+from readability.readability import Document
 
 
 
@@ -51,7 +51,7 @@ def getDoc(url):
         for child in parents_with_children_counts[i][0]: # Possibly [1][0]
             tag = str(child.tag)
 
-            print(tag)
+            #print(tag)
             if tag == 'style' or tag == 'iframe':
                 continue
             if tag == 'font' or tag == 'div' or tag == 'script':
@@ -153,5 +153,22 @@ def getDoc(url):
     fileSize = 0.7 + float(sys.getsizeof(docString)/1000.0)
     fileSize = round(fileSize,1)
     return {'title':title,'description':description,'url':url,'timeElapsed':timeElapsed,'content':docString,'size':fileSize}
+
+def getDoc2(url):
+    t = time.time()
+    # import urllib
+    # html = urllib.urlopen(url).read()
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'}
+    r = get(url,headers=headers)
+    html = r.content
+
+    doc = Document(html,url=url)
+    readable_article = doc.summary()
+    readable_title = doc.short_title()
+    readable_article = readable_article.replace("http","/?url=http")
+    timeElapsed = int((time.time()-t)*1000)
+    fileSize = 0.7 + float(sys.getsizeof(readable_article)/1000.0)
+    fileSize = round(fileSize,1)
+    return {'title':readable_title,'description':"",'url':url,'timeElapsed':timeElapsed,'content':readable_article,'size':fileSize}
 
 #print(getDoc('http://www.bbc.co.uk/news/entertainment-arts-34768201'))

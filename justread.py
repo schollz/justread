@@ -16,8 +16,8 @@ def hello():
         return render_template('index.html')
     else:
         print(url)
-        data = getDoc(url)
-        return render_template('article.html', data=data)
+        data = getDoc2(url)
+        return render_template('article3.html', data=data)
 
 
 if __name__ == "__main__":
